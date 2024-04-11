@@ -1,0 +1,22 @@
+<launch>
+    <arg name="config_path" default = "$(find gvins)/../config/visensor_f9p/visensor_left_f9p_config.yaml" />
+	  <arg name="gvins_path" default = "$(find gvins)/../" />
+    
+    <node name="gvins_feature_tracker" pkg="gvins_feature_tracker" type="gvins_feature_tracker" output="log">
+        <param name="config_file" type="string" value="$(arg config_path)" />
+        <param name="gvins_folder" type="string" value="$(arg gvins_path)" />
+    </node>
+
+    <node name="gvins" pkg="gvins" type="gvins" output="screen">
+       <param name="config_file" type="string" value="$(arg config_path)" />
+       <param name="gvins_folder" type="string" value="$(arg gvins_path)" />
+    </node>
+
+    <!-- 开启rviz ~/catkin_ws/src/GVINS/config/gvins_rviz_config.rviz-->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find gvins)/../config/gvins_rviz_config.rviz" launch-prefix="gnome-terminal -x" output="screen" />
+
+
+    <!-- 播放rosbag ~/dataset/complex_environment.bag 输入参数pause -->
+    <node name="rosbag" pkg="rosbag" type="play" args="--pause /home/kwanwaipang/dataset/urban_driving.bag" output="screen" launch-prefix="gnome-terminal -x"/>
+
+</launch>
